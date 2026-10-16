@@ -134,17 +134,17 @@ catalog rows we add (bad rows rejected, all five tiers present).
 | File | Who | How |
 |------|-----|-----|
 | `LinkedChain.java` | CS 2114 staff | Provided; we only added the package line |
-| `Rarity.java` | TBD | GenAI-assisted (drafted by Claude) |
-| `Card.java` | TBD | GenAI-assisted (drafted by Claude) |
-| `Deck.java` | TBD | GenAI-assisted (drafted by Claude) |
-| `Pack.java` | TBD | GenAI-assisted (drafted by Claude) |
-| `CardCatalog.java` | TBD | GenAI-assisted (drafted by Claude) |
-| `PokePull.java` | TBD | GenAI-assisted (drafted by Claude) |
-| `CardTest.java` | TBD | GenAI-assisted (drafted by Claude) |
-| `DeckTest.java` | TBD | GenAI-assisted (drafted by Claude) |
-| `PackTest.java` | TBD | GenAI-assisted (drafted by Claude) |
-| `PokePullTest.java` | TBD | GenAI-assisted (drafted by Claude) |
-| `LinkedChainReuseTest.java` | TBD | GenAI-assisted (drafted by Claude) |
+| `Rarity.java` | JC | GenAI-assisted (drafted by Claude) |
+| `Card.java` | JC | GenAI-assisted (drafted by Claude) |
+| `Deck.java` | TJ | GenAI-assisted (drafted by Claude) |
+| `Pack.java` | Sachin | GenAI-assisted (drafted by Claude) |
+| `CardCatalog.java` | Hela | GenAI-assisted (drafted by Claude) |
+| `PokePull.java` | Hela | GenAI-assisted (drafted by Claude) |
+| `CardTest.java` | JC | GenAI-assisted (drafted by Claude) |
+| `DeckTest.java` | TJ | GenAI-assisted (drafted by Claude) |
+| `PackTest.java` | Sachin | GenAI-assisted (drafted by Claude) |
+| `PokePullTest.java` | Hela | GenAI-assisted (drafted by Claude) |
+| `LinkedChainReuseTest.java` | Sachin | GenAI-assisted (drafted by Claude) |
 
 **GenAI use.** We used Claude (Claude Code) to help turn our scope and spec
 into this prototype. It drafted the specification from our scope, wrote the
