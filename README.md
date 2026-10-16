@@ -10,13 +10,17 @@ opening hand of 7.
 - `src/pokepull/` application code
   - `LinkedChain.java` the provided generic chain (storage only)
   - `Card`, `Rarity`, `Deck`, `Pack`, `CardCatalog`, `PokePull`
+  - `PokePullGui`, `DeckBuilderDialog` the Swing window (collection, packs and
+    trading, saved decks, and drawing a hand). It only shows state and calls
+    `PokePull`; all rules stay in the game classes.
 - `test/pokepull/` JUnit 5 tests
 
 ## Setup (Eclipse)
 
 1. File > Import > General > Existing Projects into Workspace, and pick this folder.
 2. If Eclipse reports a JRE or JUnit problem, open Project > Properties > Java Build Path and fix the JRE System Library and JUnit 5 library entries.
-3. Run `pokepull.PokePull` to play. Run the `test` folder as JUnit tests.
+3. Run `pokepull.PokePullGui` (Run As > Java Application) to play in the
+   window, or `pokepull.PokePull` to play in the console. Run the `test` folder as JUnit tests.
 
 ## Reflection
 

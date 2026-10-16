@@ -308,6 +308,22 @@ public class PokePull
     }
 
     /**
+     * @return a snapshot of every card owned, repeats included
+     */
+    public Card[] getCollectionCards()
+    {
+        return collection.toArray(new Card[collection.size()]);
+    }
+
+    /**
+     * @return a snapshot of the saved decks
+     */
+    public Deck[] getDecks()
+    {
+        return decks.toArray(new Deck[decks.size()]);
+    }
+
+    /**
      * @return the number of unopened packs
      */
     public int getPacksOwned()
