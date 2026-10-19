@@ -10,6 +10,8 @@ opening hand of 7.
 - `src/pokepull/` application code
   - `LinkedChain.java` the provided generic chain (storage only)
   - `Card`, `Rarity`, `Deck`, `Pack`, `CardCatalog`, `PokePull`
+  - `CardView` draws a card (rarity-colored frame, type tint, moves); double-click
+    a card in the Collection tab to open it
   - `PokePullGui`, `DeckBuilderDialog` the Swing window (collection, packs and
     trading, saved decks, and drawing a hand; the collection tab and deck
     builder have a search box). It only shows state and calls

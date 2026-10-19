@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.NoSuchElementException;
 import java.util.Random;
 import javax.swing.BorderFactory;
@@ -48,6 +50,7 @@ public class PokePullGui extends JFrame
         new DefaultListModel<Row>();
     private final JTextField collectionSearch = new JTextField(22);
     private final JLabel collectionCount = new JLabel(" ");
+    private JList<Row> collectionListRef;
 
     private final JButton openPackButton = new JButton();
     private final DefaultListModel<Row> pulledModel =
@@ -135,10 +138,28 @@ public class PokePullGui extends JFrame
         clear.addActionListener(e -> collectionSearch.setText(""));
         top.add(clear);
         top.add(collectionCount);
+        JButton view = new JButton("View card");
+        view.addActionListener(e -> viewSelectedCard());
+        top.add(view);
         collectionSearch.getDocument().addDocumentListener(
             new SimpleDocumentListener(this::refreshCollection));
         panel.add(top, BorderLayout.NORTH);
-        panel.add(scroll(cardList(collectionModel)), BorderLayout.CENTER);
+        JList<Row> collectionList = cardList(collectionModel);
+        collectionList.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                if (e.getClickCount() == 2)
+                {
+                    viewSelectedCard();
+                }
+            }
+        });
+        collectionListRef = collectionList;
+        panel.add(scroll(collectionList), BorderLayout.CENTER);
+        panel.add(new JLabel("Double-click a card to see it."),
+            BorderLayout.SOUTH);
         return panel;
     }
 
@@ -462,6 +483,17 @@ public class PokePullGui extends JFrame
         return PokePull.distinct(cards);
     }
 
+    private void viewSelectedCard()
+    {
+        Row row = collectionListRef.getSelectedValue();
+        if (row == null)
+        {
+            message("Select a card first.");
+            return;
+        }
+        CardView.show(this, row.card);
+    }
+
     private void message(String text)
     {
         JOptionPane.showMessageDialog(this, text, "PokePull",
@@ -519,7 +551,7 @@ public class PokePullGui extends JFrame
             return label;
         }
 
-        private static Color colorFor(Rarity rarity)
+        static Color colorFor(Rarity rarity)
         {
             switch (rarity)
             {
