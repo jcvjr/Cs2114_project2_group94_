@@ -52,7 +52,7 @@ opening hand of 7.
   `save` (or reaches 60 cards). An earlier build only required owning one copy
   of a card, which let players add cards they did not have. Saved decks are not
   re-checked if the user later trades cards away.
-- **New class `CardCatalog`.** It holds the 49-card Gen 1 catalog the packs draw
+- **New class `CardCatalog`.** It holds the 75-card Gen 1 catalog the packs draw
   from, so `Pack` and `PokePull` stay free of card data.
 - **Added methods.** `Deck.toArray()` and a package-level `Deck.copyOf`
   (copy a chain of cards), plus `PokePull.findOwned` and a few getters
@@ -105,7 +105,7 @@ collection).
   the menu itself can't be tested for it, because `run()` always starts a new
   game with no saved decks.
 - **No saving to disk.** The game resets when the program quits.
-- **Catalog size.** 49 cards, not all 151.
+- **Catalog size.** 75 cards, not all 151.
 - **Trading** lets the user give up any five cards, including ones they own
   only one of.
 
@@ -116,7 +116,7 @@ collection).
 2. Test the deck builder end to end, with scripted input that builds a full deck.
 3. Let the user see a saved deck's contents, not just its size.
 4. Tune the rarity weights and playtest the pack and trade economy.
-5. Fill out the catalog beyond 49 cards.
+5. Fill out the catalog beyond 75 cards.
 
 **Stretch goals.** We are committing to one: the weighted randomization
 (rarity), which is already in as five tiers. We are dropping random deck,
