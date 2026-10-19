@@ -154,7 +154,7 @@ public class PokePull
 
     /**
      * Adds one card to a deck being built, if the user owns enough copies.
-     * Deck still enforces the 60-card and 4-copy rules.
+     * Deck still enforces the maximum deck size and 4-copy rules.
      *
      * @param deck the deck being built
      * @param card the card to add
@@ -204,10 +204,11 @@ public class PokePull
             throw new IllegalArgumentException(
                 "A deck named \"" + deck.getName() + "\" already exists.");
         }
-        if (!deck.isComplete())
+        if (!deck.isSavable())
         {
-            throw new IllegalStateException("A deck needs exactly "
-                + Deck.MAX_SIZE + " cards; this one has " + deck.size() + ".");
+            throw new IllegalStateException("A deck needs between "
+                + Deck.MIN_SIZE + " and " + Deck.MAX_SIZE
+                + " cards; this one has " + deck.size() + ".");
         }
         decks.add(deck);
     }
@@ -559,8 +560,10 @@ public class PokePull
         }
         Deck draft = new Deck(name);
         out.println("Type a card name (add a number to add several, e.g. "
-            + "\"Pikachu 4\"), \"remove <name>\", \"list\", or \"cancel\".");
-        while (!draft.isComplete())
+            + "\"Pikachu 4\"), \"remove <name>\", \"list\", \"save\" (needs "
+            + Deck.MIN_SIZE + " to " + Deck.MAX_SIZE + " cards), or "
+            + "\"cancel\".");
+        while (draft.size() < Deck.MAX_SIZE)
         {
             String line = prompt(in, out, draft.getName() + " ("
                 + draft.size() + "/" + Deck.MAX_SIZE + "): ");
@@ -568,6 +571,17 @@ public class PokePull
             {
                 out.println("Deck building cancelled.");
                 return;
+            }
+            if (line.trim().equalsIgnoreCase("save"))
+            {
+                if (draft.isSavable())
+                {
+                    break;
+                }
+                out.println("Add at least " + Deck.MIN_SIZE
+                    + " cards before saving (this deck has " + draft.size()
+                    + ").");
+                continue;
             }
             draftCommand(draft, line.trim(), out);
         }

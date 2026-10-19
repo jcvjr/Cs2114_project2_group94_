@@ -11,7 +11,9 @@ import java.util.Random;
  */
 public class Deck
 {
-    /** Cards in a complete deck. */
+    /** Fewest cards a deck may have when it is saved. */
+    public static final int MIN_SIZE = 20;
+    /** Most cards a deck may hold. */
     public static final int MAX_SIZE = 60;
     /** Most copies of one card allowed in a deck. */
     public static final int MAX_COPIES = 4;
@@ -99,11 +101,12 @@ public class Deck
     }
 
     /**
-     * @return true if the deck holds exactly MAX_SIZE cards
+     * @return true if the deck has between MIN_SIZE and MAX_SIZE cards, so
+     *         it can be saved
      */
-    public boolean isComplete()
+    public boolean isSavable()
     {
-        return cards.size() == MAX_SIZE;
+        return cards.size() >= MIN_SIZE && cards.size() <= MAX_SIZE;
     }
 
     /**

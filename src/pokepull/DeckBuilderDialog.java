@@ -18,7 +18,7 @@ import javax.swing.ListSelectionModel;
 
 /**
  * A window for building one deck. Cards come from the user's collection;
- * Deck enforces the 60-card and 4-copy rules, and this dialog just shows
+ * Deck enforces the deck-size and 4-copy rules, and this dialog just shows
  * what Deck says.
  *
  * @version Fall 2026
@@ -186,7 +186,7 @@ public class DeckBuilderDialog extends JDialog
                 + "   x" + draft.countOf(card)));
         }
         count.setText(draft.getName() + ": " + draft.size() + " / "
-            + Deck.MAX_SIZE + " cards (max " + Deck.MAX_COPIES
-            + " copies of each)");
+            + Deck.MAX_SIZE + " cards (save with at least " + Deck.MIN_SIZE
+            + "; max " + Deck.MAX_COPIES + " copies of each)");
     }
 }

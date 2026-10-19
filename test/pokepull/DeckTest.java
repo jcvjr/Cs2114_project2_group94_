@@ -47,7 +47,7 @@ public class DeckTest
     {
         assertEquals("Fire", deck.getName());
         assertEquals(0, deck.size());
-        assertFalse(deck.isComplete());
+        assertFalse(deck.isSavable());
     }
 
     @Test
@@ -85,7 +85,7 @@ public class DeckTest
     {
         Deck full = fullDeck("Full");
         assertEquals(60, full.size());
-        assertTrue(full.isComplete());
+        assertTrue(full.isSavable());
         Card extra = new Card("Extra", "Fire", new String[] {"X"}, 10,
             Rarity.COMMON);
         assertThrows(IllegalStateException.class, () -> full.addCard(extra));
@@ -115,13 +115,20 @@ public class DeckTest
     }
 
     @Test
-    public void isCompleteNeedsExactlySixty()
+    public void isSavableNeedsBetweenTwentyAndSixtyCards()
     {
         Deck full = fullDeck("Full");
-        assertTrue(full.isComplete());
+        assertTrue(full.isSavable());
+        Card[] all = full.toArray();
+        while (full.size() > Deck.MIN_SIZE)
+        {
+            full.removeCard(all[full.size() - 1]);
+        }
+        assertEquals(Deck.MIN_SIZE, full.size());
+        assertTrue(full.isSavable());
         full.removeCard(full.toArray()[0]);
-        assertFalse(full.isComplete());
-        assertEquals(59, full.size());
+        assertFalse(full.isSavable());
+        assertFalse(new Deck("Empty").isSavable());
     }
 
     @Test

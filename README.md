@@ -2,7 +2,7 @@
 
 PokePull: a deck builder and card collector for Gen 1 Pokémon, built for CS 2114.
 The user starts with 10 cards and 2 or 3 packs, opens packs for more cards,
-builds and saves 60-card decks (at most 4 copies of any card), and draws an
+builds and saves decks of 20 to 60 cards (at most 4 copies of any card, and never more copies than they own), and draws an
 opening hand of 7.
 
 ## Layout
@@ -43,14 +43,15 @@ opening hand of 7.
   throw, and `PokePull` explains the problem to the user. One difference: the
   menu catches exceptions in one place (`run()`) instead of at every call.
   `deleteDeck` still returns false, and the menu turns that into "no such deck".
-- **Deck ownership rule.** A deck may not hold more copies of a card than
-  the user owns (`PokePull.addToDeck`; `Deck` still enforces the 60-card and
-  4-copy rules). An earlier build only required owning one copy of a card;
-  we changed it because the deck builder let players add cards they did not
-  have. Saved decks are not re-checked if the user later trades cards away.
-  **Known problem:** a deck needs 60 cards, but a player starts with 10 cards
-  and 2 or 3 packs of 8 to 10 cards, which is at most 40 cards, so a full
-  deck cannot be built yet (see "What doesn't work yet").
+- **Deck size and ownership rules.** The scope said decks are exactly 60
+  cards. We changed it to 20 to 60 cards so players can save work-in-progress
+  decks: a new player starts with at most 40 cards, and a deck may not hold
+  more copies of a card than the user owns (`PokePull.addToDeck`; `Deck` still
+  enforces the 60-card maximum and 4-copy limit). `Deck.isComplete()` became
+  `Deck.isSavable()`, and the console builder now ends when the user types
+  `save` (or reaches 60 cards). An earlier build only required owning one copy
+  of a card, which let players add cards they did not have. Saved decks are not
+  re-checked if the user later trades cards away.
 - **New class `CardCatalog`.** It holds the 49-card Gen 1 catalog the packs draw
   from, so `Pack` and `PokePull` stay free of card data.
 - **Added methods.** `Deck.toArray()` and a package-level `Deck.copyOf`
@@ -94,10 +95,6 @@ collection).
 
 ### What doesn't work yet?
 
-- **A 60-card deck cannot be built yet.** Because decks are limited to owned
-  copies, a new player (at most 40 cards) can never reach 60. We need to
-  decide how players get more cards (more starting packs, free packs, or a
-  smaller deck size).
 - **Card-limit swap.** At the 4-copy limit the builder refuses the card and
   tells the user to use `remove <name>`, but it does not ask "do you want to
   swap?" as an interactive question.

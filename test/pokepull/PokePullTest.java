@@ -35,6 +35,17 @@ public class PokePullTest
         return DeckTest.fullDeck(name);
     }
 
+    private Deck deckOfSize(String name, int size)
+    {
+        Deck deck = new Deck(name);
+        Card[] all = firstCatalogCards();
+        for (int i = 0; deck.size() < size; i++)
+        {
+            deck.addCard(all[i / Deck.MAX_COPIES]);
+        }
+        return deck;
+    }
+
     private String runMenu(String input)
     {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -222,7 +233,17 @@ public class PokePullTest
             () -> game.saveDeck(null));
         assertThrows(IllegalStateException.class,
             () -> game.saveDeck(new Deck("Short")));
+        assertThrows(IllegalStateException.class,
+            () -> game.saveDeck(deckOfSize("Almost", Deck.MIN_SIZE - 1)));
         assertEquals(1, game.getDeckCount());
+    }
+
+    @Test
+    public void saveDeckAcceptsWorkInProgressDeckOfMinimumSize()
+    {
+        game.saveDeck(deckOfSize("WIP", Deck.MIN_SIZE));
+        assertEquals(1, game.getDeckCount());
+        assertEquals(Deck.MIN_SIZE, game.findDeck("WIP").size());
     }
 
     @Test
@@ -364,6 +385,15 @@ public class PokePullTest
         String out = runMenu("7\nNope\n8\nNope\n9\n0\n");
         assertTrue(out.contains("No such deck"));
         assertTrue(out.contains("Start a hand from a deck"));
+    }
+
+    @Test
+    public void menuRefusesToSaveATooSmallDeck()
+    {
+        String out = runMenu("4\nTiny\nsave\ncancel\n0\n");
+        assertTrue(out.contains("Add at least " + Deck.MIN_SIZE));
+        assertTrue(out.contains("Deck building cancelled"));
+        assertEquals(0, game.getDeckCount());
     }
 
     @Test
