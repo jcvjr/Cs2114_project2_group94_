@@ -153,6 +153,39 @@ public class PokePull
     }
 
     /**
+     * Adds one card to a deck being built, if the user owns enough copies.
+     * Deck still enforces the 60-card and 4-copy rules.
+     *
+     * @param deck the deck being built
+     * @param card the card to add
+     * @throws IllegalArgumentException if deck or card is null
+     * @throws IllegalStateException    if the deck already holds every copy
+     *                                  of card the user owns, or Deck rejects
+     *                                  the card
+     */
+    public void addToDeck(Deck deck, Card card)
+    {
+        if (deck == null || card == null)
+        {
+            throw new IllegalArgumentException(
+                "Deck and card must not be null");
+        }
+        int owned = collection.count(card);
+        if (owned == 0)
+        {
+            throw new IllegalStateException(
+                "You don't own " + card.getName() + ".");
+        }
+        if (deck.countOf(card) >= owned)
+        {
+            throw new IllegalStateException("You only own " + owned
+                + (owned == 1 ? " copy of " : " copies of ")
+                + card.getName() + ".");
+        }
+        deck.addCard(card);
+    }
+
+    /**
      * Saves a finished deck.
      *
      * @param deck the deck to save
@@ -587,7 +620,7 @@ public class PokePull
         {
             try
             {
-                draft.addCard(card);
+                addToDeck(draft, card);
             }
             catch (IllegalStateException e)
             {

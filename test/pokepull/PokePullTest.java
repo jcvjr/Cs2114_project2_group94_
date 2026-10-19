@@ -147,6 +147,61 @@ public class PokePullTest
         assertEquals(PokePull.STARTER_CARDS, game.getCollectionSize());
     }
 
+    // addToDeck
+
+    @Test
+    public void addToDeckAllowsUpToTheCopiesOwned()
+    {
+        Card owned = ownedCards(1)[0];
+        Deck deck = new Deck("Mine");
+        game.addToDeck(deck, owned);
+        assertEquals(1, deck.countOf(owned));
+    }
+
+    @Test
+    public void addToDeckRefusesMoreCopiesThanOwned()
+    {
+        Card owned = ownedCards(1)[0];
+        Deck deck = new Deck("Mine");
+        game.addToDeck(deck, owned);
+        assertThrows(IllegalStateException.class,
+            () -> game.addToDeck(deck, owned));
+        assertEquals(1, deck.countOf(owned));
+    }
+
+    @Test
+    public void addToDeckRefusesUnownedAndNullArguments()
+    {
+        Deck deck = new Deck("Mine");
+        assertThrows(IllegalStateException.class,
+            () -> game.addToDeck(deck, firstUnowned()));
+        assertThrows(IllegalArgumentException.class,
+            () -> game.addToDeck(null, ownedCards(1)[0]));
+        assertThrows(IllegalArgumentException.class,
+            () -> game.addToDeck(deck, null));
+        assertEquals(0, deck.size());
+    }
+
+    @Test
+    public void addToDeckStillEnforcesFourCopyLimit()
+    {
+        LinkedChain<Card> catalog = CardCatalog.gen1();
+        Card card = catalog.get(0);
+        PokePull rich = new PokePull(catalog, new Random(1));
+        rich.startNewGame();
+        while (rich.getPacksOwned() > 0)
+        {
+            rich.openPack();
+        }
+        Deck deck = new Deck("Mine");
+        int copies = Math.min(rich.ownedCopies(card), Deck.MAX_COPIES);
+        for (int i = 0; i < copies; i++)
+        {
+            rich.addToDeck(deck, card);
+        }
+        assertTrue(deck.countOf(card) <= Deck.MAX_COPIES);
+    }
+
     // saveDeck / findDeck / deleteDeck / copyDeck
 
     @Test
@@ -322,7 +377,7 @@ public class PokePullTest
     }
 
     @Test
-    public void menuRefusesFifthCopyWhileBuilding()
+    public void menuRefusesMoreCopiesThanOwnedWhileBuilding()
     {
         // run() deals the starter cards first, and a fresh PokePull with the
         // same seed deals the same ones, so we can learn an owned name.
@@ -334,7 +389,7 @@ public class PokePullTest
         fixed.run(new Scanner("4\nMine\n" + name + " 5\ncancel\n0\n"),
             new PrintStream(bytes));
         String out = bytes.toString();
-        assertTrue(out.contains("at most 4 copies"));
+        assertTrue(out.contains("You only own 1 copy of " + name));
         assertTrue(out.contains("remove <name>"));
     }
 

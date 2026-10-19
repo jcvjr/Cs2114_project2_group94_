@@ -43,12 +43,14 @@ opening hand of 7.
   throw, and `PokePull` explains the problem to the user. One difference: the
   menu catches exceptions in one place (`run()`) instead of at every call.
   `deleteDeck` still returns false, and the menu turns that into "no such deck".
-- **Deck ownership rule.** The spec said a deck may not hold more copies of a
-  card than the user owns. A new player owns about 30 cards, so a 60-card deck
-  could never be built. We built a looser rule: a card can be added if the user
-  owns at least one copy; the 4-copy rule still applies. In 2,000 seeded games
-  a player who opens all starting packs always owns at least 16 different
-  cards, and 15 are enough for a 60-card deck.
+- **Deck ownership rule.** A deck may not hold more copies of a card than
+  the user owns (`PokePull.addToDeck`; `Deck` still enforces the 60-card and
+  4-copy rules). An earlier build only required owning one copy of a card;
+  we changed it because the deck builder let players add cards they did not
+  have. Saved decks are not re-checked if the user later trades cards away.
+  **Known problem:** a deck needs 60 cards, but a player starts with 10 cards
+  and 2 or 3 packs of 8 to 10 cards, which is at most 40 cards, so a full
+  deck cannot be built yet (see "What doesn't work yet").
 - **New class `CardCatalog`.** It holds the 49-card Gen 1 catalog the packs draw
   from, so `Pack` and `PokePull` stay free of card data.
 - **Added methods.** `Deck.toArray()` and a package-level `Deck.copyOf`
@@ -92,6 +94,10 @@ collection).
 
 ### What doesn't work yet?
 
+- **A 60-card deck cannot be built yet.** Because decks are limited to owned
+  copies, a new player (at most 40 cards) can never reach 60. We need to
+  decide how players get more cards (more starting packs, free packs, or a
+  smaller deck size).
 - **Card-limit swap.** At the 4-copy limit the builder refuses the card and
   tells the user to use `remove <name>`, but it does not ask "do you want to
   swap?" as an interactive question.

@@ -134,13 +134,12 @@ public class DeckBuilderDialog extends JDialog
         }
         try
         {
-            draft.addCard(row.card);
+            game.addToDeck(draft, row.card);
             message.setText(" ");
         }
         catch (IllegalStateException e)
         {
-            message.setText(e.getMessage()
-                + " Remove a card from the deck to make room.");
+            message.setText(e.getMessage());
         }
         refresh();
         ownedList.setSelectedIndex(index);
