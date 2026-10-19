@@ -22,6 +22,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.DefaultListCellRenderer;
@@ -43,6 +46,8 @@ public class PokePullGui extends JFrame
 
     private final DefaultListModel<Row> collectionModel =
         new DefaultListModel<Row>();
+    private final JTextField collectionSearch = new JTextField(22);
+    private final JLabel collectionCount = new JLabel(" ");
 
     private final JButton openPackButton = new JButton();
     private final DefaultListModel<Row> pulledModel =
@@ -123,8 +128,16 @@ public class PokePullGui extends JFrame
     {
         JPanel panel = new JPanel(new BorderLayout(8, 8));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panel.add(new JLabel("Every card you own, with how many copies:"),
-            BorderLayout.NORTH);
+        JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        top.add(new JLabel("Search (name, type, rarity or move):"));
+        top.add(collectionSearch);
+        JButton clear = new JButton("Clear");
+        clear.addActionListener(e -> collectionSearch.setText(""));
+        top.add(clear);
+        top.add(collectionCount);
+        collectionSearch.getDocument().addDocumentListener(
+            new SimpleDocumentListener(this::refreshCollection));
+        panel.add(top, BorderLayout.NORTH);
         panel.add(scroll(cardList(collectionModel)), BorderLayout.CENTER);
         return panel;
     }
@@ -392,12 +405,7 @@ public class PokePullGui extends JFrame
     {
         Card[] all = game.getCollectionCards();
 
-        collectionModel.clear();
-        for (Card card : distinct(all))
-        {
-            collectionModel.addElement(new Row(card, card + "   x"
-                + game.ownedCopies(card)));
-        }
+        refreshCollection();
 
         tradeModel.clear();
         for (Card card : all)
@@ -428,6 +436,22 @@ public class PokePullGui extends JFrame
     }
 
     /**
+     * Redraws the collection tab's list using the search box.
+     */
+    private void refreshCollection()
+    {
+        collectionModel.clear();
+        Card[] found = game.searchCollection(collectionSearch.getText());
+        for (Card card : found)
+        {
+            collectionModel.addElement(new Row(card, card + "   x"
+                + game.ownedCopies(card)));
+        }
+        int total = PokePull.distinct(game.getCollectionCards()).length;
+        collectionCount.setText("Showing " + found.length + " of " + total);
+    }
+
+    /**
      * Lists each different card once, in first-seen order.
      *
      * @param cards cards that may repeat
@@ -435,18 +459,7 @@ public class PokePullGui extends JFrame
      */
     static Card[] distinct(Card[] cards)
     {
-        LinkedChain<String> seen = new LinkedChain<String>();
-        LinkedChain<Card> unique = new LinkedChain<Card>();
-        for (Card card : cards)
-        {
-            String key = card.getName().toLowerCase();
-            if (!seen.contains(key))
-            {
-                seen.add(key);
-                unique.addToEnd(card);
-            }
-        }
-        return unique.toArray(new Card[unique.size()]);
+        return PokePull.distinct(cards);
     }
 
     private void message(String text)
@@ -521,6 +534,37 @@ public class PokePullGui extends JFrame
                 default:
                     return new Color(0x444444);
             }
+        }
+    }
+
+    /**
+     * A DocumentListener that runs one action on every change.
+     */
+    static final class SimpleDocumentListener implements DocumentListener
+    {
+        private final Runnable action;
+
+        SimpleDocumentListener(Runnable action)
+        {
+            this.action = action;
+        }
+
+        @Override
+        public void insertUpdate(DocumentEvent e)
+        {
+            action.run();
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e)
+        {
+            action.run();
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e)
+        {
+            action.run();
         }
     }
 }

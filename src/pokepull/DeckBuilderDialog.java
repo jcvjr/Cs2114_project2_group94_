@@ -15,6 +15,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.JTextField;
 
 /**
  * A window for building one deck. Cards come from the user's collection;
@@ -38,6 +39,7 @@ public class DeckBuilderDialog extends JDialog
         new DefaultListModel<PokePullGui.Row>();
     private final JList<PokePullGui.Row> deckList =
         new JList<PokePullGui.Row>(deckModel);
+    private final JTextField search = new JTextField(20);
     private final JLabel count = new JLabel();
     private final JLabel message = new JLabel(" ");
 
@@ -81,6 +83,12 @@ public class DeckBuilderDialog extends JDialog
             }
         });
 
+        JPanel searchRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        searchRow.add(new JLabel("Search your cards:"));
+        searchRow.add(search);
+        search.getDocument().addDocumentListener(
+            new PokePullGui.SimpleDocumentListener(this::refresh));
+
         JPanel lists = new JPanel(new GridLayout(1, 2, 10, 0));
         lists.add(titled("Your cards (double-click to add)", ownedList));
         lists.add(titled("In this deck (double-click to remove)", deckList));
@@ -105,7 +113,10 @@ public class DeckBuilderDialog extends JDialog
 
         JPanel content = new JPanel(new BorderLayout(8, 8));
         content.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        content.add(count, BorderLayout.NORTH);
+        JPanel header = new JPanel(new BorderLayout());
+        header.add(count, BorderLayout.NORTH);
+        header.add(searchRow, BorderLayout.CENTER);
+        content.add(header, BorderLayout.NORTH);
         content.add(lists, BorderLayout.CENTER);
         content.add(bottom, BorderLayout.SOUTH);
         setContentPane(content);
@@ -174,7 +185,7 @@ public class DeckBuilderDialog extends JDialog
     private void refresh()
     {
         ownedModel.clear();
-        for (Card card : PokePullGui.distinct(game.getCollectionCards()))
+        for (Card card : game.searchCollection(search.getText()))
         {
             ownedModel.addElement(new PokePullGui.Row(card, card.toString()
                 + "   owned x" + game.ownedCopies(card)));

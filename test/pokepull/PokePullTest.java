@@ -349,6 +349,53 @@ public class PokePullTest
         assertThrows(NoSuchElementException.class, () -> game.drawCard());
     }
 
+    // searchCollection / distinct
+
+    @Test
+    public void searchCollectionFindsOwnedCardsByName()
+    {
+        Card owned = ownedCards(1)[0];
+        Card[] found = game.searchCollection(owned.getName().toLowerCase());
+        assertTrue(found.length >= 1);
+        boolean seen = false;
+        for (Card c : found)
+        {
+            assertTrue(c.matches(owned.getName()));
+            seen = seen || c.equals(owned);
+        }
+        assertTrue(seen);
+    }
+
+    @Test
+    public void searchCollectionBlankReturnsEachOwnedCardOnce()
+    {
+        game.openPack();
+        Card[] all = game.searchCollection("");
+        assertEquals(PokePull.distinct(game.getCollectionCards()).length,
+            all.length);
+        assertEquals(all.length, game.searchCollection(null).length);
+    }
+
+    @Test
+    public void searchCollectionDoesNotReturnUnownedOrNonMatchingCards()
+    {
+        Card notOwned = firstUnowned();
+        for (Card c : game.searchCollection(notOwned.getName()))
+        {
+            assertNotEquals(notOwned, c);
+        }
+        assertEquals(0, game.searchCollection("zzzz-no-such-card").length);
+    }
+
+    @Test
+    public void distinctKeepsFirstOfEachName()
+    {
+        Card[] cards = firstCatalogCards();
+        Card[] doubled = {cards[0], cards[1], cards[0], cards[1]};
+        assertEquals(2, PokePull.distinct(doubled).length);
+        assertEquals(0, PokePull.distinct(new Card[0]).length);
+    }
+
     // console menu
 
     @Test
@@ -377,6 +424,21 @@ public class PokePullTest
     {
         String out = runMenu("2\n2\n2\n2\n0\n");
         assertTrue(out.contains("You have no packs to open."));
+    }
+
+    @Test
+    public void menuSearchShowsMatchesAndNoMatchMessage()
+    {
+        PokePull reference = new PokePull(new Random(5));
+        reference.startNewGame();
+        String name = ownedName(reference);
+        PokePull fixed = new PokePull(new Random(5));
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        fixed.run(new Scanner("10\n" + name + "\n10\nzzzz-nothing\n0\n"),
+            new PrintStream(bytes));
+        String out = bytes.toString();
+        assertTrue(out.contains(name + " ("));
+        assertTrue(out.contains("No cards match \"zzzz-nothing\"."));
     }
 
     @Test

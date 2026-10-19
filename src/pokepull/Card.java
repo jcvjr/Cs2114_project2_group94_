@@ -105,6 +105,37 @@ public class Card
     }
 
     /**
+     * Tests whether this card matches a search. The search is a
+     * case-insensitive piece of text that may appear in the card's name,
+     * type, rarity (for example "super rare") or any of its moves.
+     *
+     * @param query the text to look for; null or blank matches every card
+     * @return true if the card matches
+     */
+    public boolean matches(String query)
+    {
+        if (query == null || query.isBlank())
+        {
+            return true;
+        }
+        String q = query.trim().toLowerCase();
+        if (name.toLowerCase().contains(q) || type.toLowerCase().contains(q)
+            || rarity.name().toLowerCase().contains(q)
+            || rarity.name().replace('_', ' ').toLowerCase().contains(q))
+        {
+            return true;
+        }
+        for (String move : moves)
+        {
+            if (move.toLowerCase().contains(q))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Cards are equal if their names match, ignoring case.
      *
      * @param other the object to compare with

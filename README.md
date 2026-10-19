@@ -11,7 +11,8 @@ opening hand of 7.
   - `LinkedChain.java` the provided generic chain (storage only)
   - `Card`, `Rarity`, `Deck`, `Pack`, `CardCatalog`, `PokePull`
   - `PokePullGui`, `DeckBuilderDialog` the Swing window (collection, packs and
-    trading, saved decks, and drawing a hand). It only shows state and calls
+    trading, saved decks, and drawing a hand; the collection tab and deck
+    builder have a search box). It only shows state and calls
     `PokePull`; all rules stay in the game classes.
 - `test/pokepull/` JUnit 5 tests
 

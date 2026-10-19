@@ -303,6 +303,48 @@ public class PokePull
     }
 
     /**
+     * Searches the user's collection.
+     *
+     * @param query text to look for in a card's name, type, rarity or
+     *              moves; null or blank matches everything
+     * @return each matching card once, in the order first owned
+     */
+    public Card[] searchCollection(String query)
+    {
+        LinkedChain<Card> matches = new LinkedChain<Card>();
+        for (Card card : distinct(getCollectionCards()))
+        {
+            if (card.matches(query))
+            {
+                matches.addToEnd(card);
+            }
+        }
+        return matches.toArray(new Card[matches.size()]);
+    }
+
+    /**
+     * Lists each different card once, in first-seen order.
+     *
+     * @param cards cards that may repeat
+     * @return the distinct cards
+     */
+    public static Card[] distinct(Card[] cards)
+    {
+        LinkedChain<String> seen = new LinkedChain<String>();
+        LinkedChain<Card> unique = new LinkedChain<Card>();
+        for (Card card : cards)
+        {
+            String key = card.getName().toLowerCase();
+            if (!seen.contains(key))
+            {
+                seen.add(key);
+                unique.addToEnd(card);
+            }
+        }
+        return unique.toArray(new Card[unique.size()]);
+    }
+
+    /**
      * Shuffles a saved deck into a draw pile and draws the opening hand.
      * The saved deck itself is not changed.
      *
@@ -429,6 +471,7 @@ public class PokePull
         out.println("4) Build a deck      5) List decks");
         out.println("6) Copy a deck       7) Delete a deck");
         out.println("8) Draw opening hand 9) Draw another card");
+        out.println("10) Search your collection");
         out.println("0) Quit");
     }
 
@@ -464,6 +507,9 @@ public class PokePull
                 break;
             case "9":
                 out.println("You drew: " + drawCard());
+                break;
+            case "10":
+                searchMenu(in, out);
                 break;
             case "0":
                 return false;
@@ -642,6 +688,26 @@ public class PokePull
                     + " Use \"remove <name>\" to swap a card out.");
                 return;
             }
+        }
+    }
+
+    private void searchMenu(Scanner in, PrintStream out)
+    {
+        String query = prompt(in, out,
+            "Search by name, type, rarity or move: ");
+        if (query == null)
+        {
+            return;
+        }
+        Card[] found = searchCollection(query);
+        if (found.length == 0)
+        {
+            out.println("No cards match \"" + query.trim() + "\".");
+            return;
+        }
+        for (Card card : found)
+        {
+            out.println("  " + card + " x" + collection.count(card));
         }
     }
 

@@ -91,4 +91,33 @@ public class CardTest
         assertEquals("Pikachu (Electric, 35 HP, UNCOMMON)",
             pikachu().toString());
     }
+
+    @Test
+    public void matchesFindsNameTypeRarityAndMoveIgnoringCase()
+    {
+        Card c = new Card("Pikachu", "Electric",
+            new String[] {"Thunder Shock", "Quick Attack"}, 35,
+            Rarity.SUPER_RARE);
+        assertTrue(c.matches("pika"));
+        assertTrue(c.matches("ELECTRIC"));
+        assertTrue(c.matches("super rare"));
+        assertTrue(c.matches("super_rare"));
+        assertTrue(c.matches("quick att"));
+        assertTrue(c.matches("  pikachu  "));
+    }
+
+    @Test
+    public void matchesRejectsTextThatIsNotThere()
+    {
+        assertFalse(pikachu().matches("charmander"));
+        assertFalse(pikachu().matches("legendary"));
+    }
+
+    @Test
+    public void matchesTreatsNullAndBlankAsEverything()
+    {
+        assertTrue(pikachu().matches(null));
+        assertTrue(pikachu().matches(""));
+        assertTrue(pikachu().matches("   "));
+    }
 }
