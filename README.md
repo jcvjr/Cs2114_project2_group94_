@@ -64,9 +64,11 @@ opening hand of 7.
   The rare guarantee is built in by picking one slot in the pack up front and
   making it at least RARE, rather than replacing a card afterward. If a tier
   has no cards, `pickCard` tries lower tiers, then higher tiers.
-- **Tests.** The spec listed tests for every LinkedChain method; since that
-  class was given to us, we dropped those and added `LinkedChainReuseTest`,
-  which shows one class storing three element types. There are 62 tests.
+- **Tests.** The spec listed tests for every LinkedChain method. We first
+  dropped those because the class was given to us, then added
+  `LinkedChainTest` (a normal and a bad-input case for each public method) and
+  `LinkedChainReuseTest`, which shows one class storing three element types.
+  There are 118 tests.
 
 ### What changed in the LinkedChain?
 
@@ -155,10 +157,17 @@ catalog rows we add (bad rows rejected, all five tiers present).
 | `PackTest.java` | Sachin | GenAI-assisted (drafted by Claude) |
 | `PokePullTest.java` | JC | GenAI-assisted (drafted by Claude) |
 | `LinkedChainReuseTest.java` | Sachin | GenAI-assisted (drafted by Claude) |
+| `LinkedChainTest.java` | TBD | GenAI-assisted (drafted by Claude) |
+| `PokePullGui.java` | TBD | GenAI-assisted (drafted by Claude) |
+| `DeckBuilderDialog.java` | TBD | GenAI-assisted (drafted by Claude) |
+| `CardView.java` | TBD | GenAI-assisted (drafted by Claude) |
+| `CardCatalogTest.java` | TBD | GenAI-assisted (drafted by Claude) |
+| `PokePullGuiTest.java` | TBD | GenAI-assisted (drafted by Claude) |
+| `CardViewTest.java` | TBD | GenAI-assisted (drafted by Claude) |
 
 **GenAI use.** We used Claude (Claude Code) to help turn our scope and spec
 into this prototype. It drafted the specification from our scope, wrote the
-first version of the classes and tests above, compiled them and ran the 62
+first version of the classes and tests above, compiled them and ran the 118
 tests, and wrote this README. The design choices that came from the team were
 the scope itself, the decision to have a single reach goal (weighted
 randomization), and the five rarity tiers. Teammates should replace each
