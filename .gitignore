@@ -1,5 +1,6 @@
 # Eclipse / Java build output
 bin/
+out/
 *.class
 
 # Eclipse workspace metadata

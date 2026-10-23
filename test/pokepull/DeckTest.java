@@ -204,4 +204,31 @@ public class DeckTest
         shown.clear();
         assertEquals(1, deck.size());
     }
+
+    @Test
+    public void toStringShowsNameAndSize()
+    {
+        deck.addCard(pikachu);
+        assertEquals("Fire (1 cards)", deck.toString());
+        assertEquals("Empty (0 cards)", new Deck("Empty").toString());
+    }
+
+    @Test
+    public void toArrayIsASnapshotOfTheDeck()
+    {
+        deck.addCard(pikachu);
+        deck.addCard(charmander);
+        Card[] snapshot = deck.toArray();
+        assertEquals(2, snapshot.length);
+        snapshot[0] = null;
+        assertEquals(2, deck.toArray().length);
+        assertNotNull(deck.toArray()[0]);
+        assertEquals(0, new Deck("Empty").toArray().length);
+    }
+
+    @Test
+    public void nameIsTrimmed()
+    {
+        assertEquals("Fire", new Deck("  Fire  ").getName());
+    }
 }

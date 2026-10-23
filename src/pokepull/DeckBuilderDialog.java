@@ -49,10 +49,11 @@ public class DeckBuilderDialog extends JDialog
      * @param owner the window that opened this dialog
      * @param game  the game whose collection supplies the cards
      * @param draft the empty deck being built
+     * @throws IllegalArgumentException if game or draft is null
      */
     public DeckBuilderDialog(JFrame owner, PokePull game, Deck draft)
     {
-        super(owner, "Build deck: " + draft.getName(), true);
+        super(owner, "Build deck: " + nameOf(draft, game), true);
         this.game = game;
         this.draft = draft;
 
@@ -124,6 +125,16 @@ public class DeckBuilderDialog extends JDialog
         refresh();
         setSize(760, 520);
         setLocationRelativeTo(owner);
+    }
+
+    private static String nameOf(Deck draft, PokePull game)
+    {
+        if (draft == null || game == null)
+        {
+            throw new IllegalArgumentException(
+                "Game and deck must not be null");
+        }
+        return draft.getName();
     }
 
     private static JPanel titled(String title, JList<?> list)

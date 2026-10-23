@@ -56,6 +56,24 @@ public class PokePullTest
     // startNewGame / constructor
 
     @Test
+    public void defaultConstructorUsesTheFullCatalogAndStartsEmpty()
+    {
+        PokePull fresh = new PokePull(new Random(1));
+        assertEquals(0, fresh.getCollectionSize());
+        assertEquals(0, fresh.getPacksOwned());
+        assertEquals(0, fresh.getDeckCount());
+        fresh.startNewGame();
+        assertEquals(PokePull.STARTER_CARDS, fresh.getCollectionSize());
+    }
+
+    @Test
+    public void constructorRejectsNullCatalog()
+    {
+        assertThrows(IllegalArgumentException.class,
+            () -> new PokePull(null, new Random(1)));
+    }
+
+    @Test
     public void startNewGameGivesStarterCollectionAndPacks()
     {
         assertEquals(PokePull.STARTER_CARDS, game.getCollectionSize());

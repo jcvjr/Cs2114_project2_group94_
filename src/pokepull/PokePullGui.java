@@ -74,10 +74,15 @@ public class PokePullGui extends JFrame
      * Builds the window around a game that has already been started.
      *
      * @param game the game to show
+     * @throws IllegalArgumentException if game is null
      */
     public PokePullGui(PokePull game)
     {
         super("PokePull");
+        if (game == null)
+        {
+            throw new IllegalArgumentException("Game must not be null");
+        }
         this.game = game;
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setJMenuBar(buildMenu());
