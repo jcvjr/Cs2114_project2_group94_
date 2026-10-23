@@ -211,28 +211,31 @@ swap prompt in the console builder.
 | `Pack.java` | Sachin | GenAI-assisted (drafted by Claude) |
 | `CardCatalog.java` | Hela | GenAI-assisted (drafted by Claude) |
 | `PokePull.java` | JC | GenAI-assisted (drafted by Claude) |
-| `PokePullGui.java` | TBD | GenAI-assisted (drafted by Claude) |
-| `DeckBuilderDialog.java` | TBD | GenAI-assisted (drafted by Claude) |
+| `PokePullGui.java` | JC | GenAI-assisted (drafted by Claude) |
+| `DeckBuilderDialog.java` | JC | GenAI-assisted (drafted by Claude) |
 | `CardView.java` | TBD | GenAI-assisted (drafted by Claude) |
 | `CardTest.java` | Hela | GenAI-assisted (drafted by Claude) |
 | `DeckTest.java` | TJ | GenAI-assisted (drafted by Claude) |
 | `PackTest.java` | Sachin | GenAI-assisted (drafted by Claude) |
 | `PokePullTest.java` | JC | GenAI-assisted (drafted by Claude) |
 | `LinkedChainReuseTest.java` | Sachin | GenAI-assisted (drafted by Claude) |
-| `LinkedChainTest.java` | TBD | GenAI-assisted (drafted by Claude) |
-| `CardCatalogTest.java` | TBD | GenAI-assisted (drafted by Claude) |
-| `CardViewTest.java` | TBD | GenAI-assisted (drafted by Claude) |
-| `PokePullGuiTest.java` | TBD | GenAI-assisted (drafted by Claude) |
-| `PokePullGuiWindowTest.java` | TBD | GenAI-assisted (drafted by Claude) |
-| `docs/system-diagram.png` | TBD | GenAI-assisted (drawn by a script written by Claude) |
+| `LinkedChainTest.java` | JC | GenAI-assisted (drafted by Claude) |
+| `CardCatalogTest.java` | JC | GenAI-assisted (drafted by Claude) |
+| `CardViewTest.java` | JC | GenAI-assisted (drafted by Claude) |
+| `PokePullGuiTest.java` | JC | GenAI-assisted (drafted by Claude) |
+| `PokePullGuiWindowTest.java` | JC | GenAI-assisted (drafted by Claude) |
+| `docs/system-diagram.png` | JC | GenAI-assisted (drawn by a script written by Claude) |
 
 **How we used GenAI.** We used Claude (Claude Code) throughout. From our
 scope document and work-in-progress spec it completed the specification,
 wrote the first version of the classes and the tests above, built the Swing
 GUI, search and card view, expanded the catalog, drew the system diagram,
-compiled and ran the tests, and wrote this README. The team made the design
+compiled and ran the tests, and wrote this README, of course, the team reviewed 
+and ensured that everything was correct. The team made the design
 decisions: the scope itself, choosing rarity as the single reach goal, the
 five rarity tiers, the 20 to 60 card deck rule and the ownership limit, the
 75-card catalog, and the GUI, search and card-view features. The team ran the
 program and the tests in Eclipse and made the commits (including the
-attribution edits) shown in the Git history.
+attribution edits) shown in the Git history. We as a team find that GenAI is a tool 
+that makes creating a well written scope and spec almost more important than the coding
+itself.
